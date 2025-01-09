@@ -1,7 +1,6 @@
 using System;
 using ClearThePath.Obstacles;
 using Path;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -14,6 +13,7 @@ namespace ClearThePath.Core
         private PathScaler _pathScaler;
         private Player _player;
         private PathChecker _pathChecker;
+        private GameStateHandler _gameStateHandler;
 
         [Inject]
         public void Construct(PlayerSpawner playerSpawner,
@@ -25,40 +25,32 @@ namespace ClearThePath.Core
             _playerSpawner = playerSpawner;
             _obstaclesSpawner = obstaclesSpawner;
             _pathScaler = pathController;
+
+            _gameStateHandler = new GameStateHandler();
         }
         
         public void Start()
         {
-            StartGame();
-        }
-
-        private void StartGame()
-        {
-            _player = _playerSpawner.Spawn();
-            _player.Initialize();
-            _obstaclesSpawner.Spawn();
-            _pathChecker.Initialize(OnWin);
-            
-            _player.SizeChanging += _pathScaler.HandlePathScale;
-            _player.ObstacleDestroyed += _pathChecker.CheckPath;
-            _player.Lost += OnLost;
-        }
-
-        private void OnWin()
-        {
-            Debug.Log("you win");
-        }
-
-        private void OnLost()
-        {
-            Debug.Log("you lost");
+            Initialize();
         }
         
         public void Dispose()
         {
             _player.SizeChanging -= _pathScaler.HandlePathScale;
             _player.ObstacleDestroyed -= _pathChecker.CheckPath;
-            _player.Lost -= OnLost;
+            _gameStateHandler.Dispose();
+        }
+
+        private void Initialize()
+        {
+            _player = _playerSpawner.Spawn();
+            _obstaclesSpawner.Spawn();
+            
+            _player.Initialize();
+            _gameStateHandler.Initialize(_player, _pathChecker);
+
+            _player.SizeChanging += _pathScaler.HandlePathScale;
+            _player.ObstacleDestroyed += _pathChecker.CheckPath;
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
+using ClearThePath;
 using UnityEngine;
 
 namespace Path
@@ -45,9 +45,8 @@ namespace Path
 
             foreach (var collider in hitColliders)
             {
-                if (collider.CompareTag("Obstacle"))
+                if (collider.CompareTag(GlobalConstants.OBSTACLE_TAG))
                 {
-                    _collider.enabled = false;
                     return;
                 }
             }
