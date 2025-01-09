@@ -1,23 +1,33 @@
+using System;
 using ClearThePath.Obstacles;
 using Path;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace ClearThePath.Core
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : IStartable, IDisposable
     {
-        [SerializeField] private PlayerSpawner _playerSpawner;
-        [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
-        [SerializeField] private PathScaler _pathScaler;
-        
+        private PlayerSpawner _playerSpawner;
+        private ObstaclesSpawner _obstaclesSpawner;
+        private PathScaler _pathScaler;
         private Player _player;
 
-        private void Start()
+        [Inject]
+        public void Construct(PlayerSpawner playerSpawner, ObstaclesSpawner obstaclesSpawner, PathScaler pathController)
+        {
+            _playerSpawner = playerSpawner;
+            _obstaclesSpawner = obstaclesSpawner;
+            _pathScaler = pathController;
+        }
+        
+        public void Start()
         {
             StartGame();
         }
 
-        public void StartGame()
+        private void StartGame()
         {
             _player = _playerSpawner.Spawn();
             _player.Initialize();
@@ -31,8 +41,8 @@ namespace ClearThePath.Core
         {
             Debug.Log("you lost");
         }
-
-        private void OnDestroy()
+        
+        public void Dispose()
         {
             _player.SizeChanging -= _pathScaler.HandlePathScale;
             _player.Lost -= OnLost;
