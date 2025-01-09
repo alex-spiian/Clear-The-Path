@@ -13,10 +13,15 @@ namespace ClearThePath.Core
         private ObstaclesSpawner _obstaclesSpawner;
         private PathScaler _pathScaler;
         private Player _player;
+        private PathChecker _pathChecker;
 
         [Inject]
-        public void Construct(PlayerSpawner playerSpawner, ObstaclesSpawner obstaclesSpawner, PathScaler pathController)
+        public void Construct(PlayerSpawner playerSpawner,
+            ObstaclesSpawner obstaclesSpawner,
+            PathScaler pathController,
+            PathChecker pathChecker)
         {
+            _pathChecker = pathChecker;
             _playerSpawner = playerSpawner;
             _obstaclesSpawner = obstaclesSpawner;
             _pathScaler = pathController;
@@ -32,9 +37,16 @@ namespace ClearThePath.Core
             _player = _playerSpawner.Spawn();
             _player.Initialize();
             _obstaclesSpawner.Spawn();
+            _pathChecker.Initialize(OnWin);
             
             _player.SizeChanging += _pathScaler.HandlePathScale;
+            _player.ObstacleDestroyed += _pathChecker.CheckPath;
             _player.Lost += OnLost;
+        }
+
+        private void OnWin()
+        {
+            Debug.Log("you win");
         }
 
         private void OnLost()
@@ -45,6 +57,7 @@ namespace ClearThePath.Core
         public void Dispose()
         {
             _player.SizeChanging -= _pathScaler.HandlePathScale;
+            _player.ObstacleDestroyed -= _pathChecker.CheckPath;
             _player.Lost -= OnLost;
         }
     }

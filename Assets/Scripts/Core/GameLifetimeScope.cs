@@ -11,6 +11,7 @@ namespace ClearThePath.Core
         [SerializeField] private PlayerSpawner _playerSpawner;
         [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
         [SerializeField] private PathScaler _pathScaler;
+        [SerializeField] private PathChecker _pathChecker;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -21,6 +22,7 @@ namespace ClearThePath.Core
             builder.RegisterInstance(_obstaclesSpawner);
             builder.RegisterInstance(_pathScaler);
             builder.RegisterInstance(_playerSpawner);
+            builder.RegisterInstance(_pathChecker);
         }
     }
 }

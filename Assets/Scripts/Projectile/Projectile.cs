@@ -1,3 +1,4 @@
+using System;
 using ClearThePath.Infectable;
 using ClearThePath.Obstacles;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace ClearThePath.Core
         
         private Vector3 _targetPosition;
         private float _currentSize;
+        private event Action _onObstacleDestroyed;
 
         public void Initialize()
         {
@@ -25,8 +27,9 @@ namespace ClearThePath.Core
             UpdateScale();
         }
 
-        public void Launch()
+        public void Launch(Action OnObstacleDestroyed)
         {
+            _onObstacleDestroyed = OnObstacleDestroyed;
             _rigidbody.isKinematic = false;
             var targetPositionZ = transform.position.z + 20;
             var targetPosition = new Vector3(transform.position.x, transform.position.y, targetPositionZ);
@@ -45,6 +48,7 @@ namespace ClearThePath.Core
             {
                 InfectNearbyObstacles(_currentSize * _infectionScaleFactor);
                 Destroy(gameObject);
+                _onObstacleDestroyed?.Invoke();
             }
         }
     }

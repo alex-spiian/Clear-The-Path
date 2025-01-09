@@ -7,6 +7,7 @@ namespace ClearThePath
     public class Player : MonoBehaviour
     {
         public event Action<float> SizeChanging;
+        public event Action ObstacleDestroyed;
         public event Action Lost;
 
         [SerializeField] private Projectile _projectilePrefab;
@@ -71,8 +72,9 @@ namespace ClearThePath
                 return;
             
             _isCharging = false;
-            _currentProjectile.Launch();
+            _currentProjectile.Launch(ObstacleDestroyed);
             _currentProjectile = null;
+            ObstacleDestroyed?.Invoke();
         }
 
         private void UpdateScale()

@@ -187,5 +187,5 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 6854328613690221851, guid: 1b28304e97bee48879ab5474c1a20a36,
     type: 3}
   _launchProjectilePoint: {fileID: 9152171878072312151}
-  _minSize: 0
+  _minSize: 0.1
   _growthSpeed: 0.3
