@@ -27,7 +27,7 @@ namespace ClearThePath.Core
 
         private void OnPlayerGotExit()
         {
-            // restart
+            Debug.Log("you got finish");
         }
 
         private void OnLost()
