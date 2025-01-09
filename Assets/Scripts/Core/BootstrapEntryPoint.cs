@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 namespace ClearThePath.Core
 {
-    public class GameManager : IStartable, IDisposable
+    public class BootstrapEntryPoint : IStartable, IDisposable
     {
         private PlayerSpawner _playerSpawner;
         private ObstaclesSpawner _obstaclesSpawner;

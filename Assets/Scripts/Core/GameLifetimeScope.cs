@@ -17,7 +17,7 @@ namespace ClearThePath.Core
         {
             base.Configure(builder);
 
-            builder.RegisterEntryPoint<GameManager>();
+            builder.RegisterEntryPoint<BootstrapEntryPoint>();
 
             builder.RegisterInstance(_obstaclesSpawner);
             builder.RegisterInstance(_pathScaler);
