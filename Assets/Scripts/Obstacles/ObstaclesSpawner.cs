@@ -20,7 +20,7 @@ namespace ClearThePath.Obstacles
 
         private readonly List<Vector3> _spawnedPositions = new();
 
-        private void Start()
+        public void Spawn()
         {
             var maxObstaclesOnTrack = CalculateMaxObstaclesOnTrack();
             

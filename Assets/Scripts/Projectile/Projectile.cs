@@ -13,9 +13,9 @@ namespace ClearThePath.Core
         private Vector3 _targetPosition;
         private float _currentSize;
 
-        public void Initialize(float initialSize)
+        public void Initialize()
         {
-            _currentSize = initialSize;
+            _currentSize = 0;
             UpdateScale();
         }
 

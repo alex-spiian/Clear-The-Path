@@ -1,3 +1,4 @@
+using System;
 using ClearThePath.Core;
 using UnityEngine;
 
@@ -5,9 +6,11 @@ namespace ClearThePath
 {
     public class Player : MonoBehaviour
     {
+        public event Action<float> SizeChanging;
+        public event Action Lost;
+
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private Transform _launchProjectilePoint;
-        [SerializeField] private float _initialSize;
         [SerializeField] private float _minSize;
         [SerializeField] private float _growthSpeed;
 
@@ -15,9 +18,9 @@ namespace ClearThePath
         private Projectile _currentProjectile;
         private bool _isCharging;
 
-        private void Start()
+        public void Initialize()
         {
-            _currentSize = _initialSize;
+            _currentSize = Vector3.one.x;
             UpdateScale();
         }
 
@@ -44,22 +47,20 @@ namespace ClearThePath
             if (_currentProjectile != null) return;
 
             _isCharging = true;
-
             _currentProjectile = Instantiate(_projectilePrefab, _launchProjectilePoint.position, Quaternion.identity);
-            _currentProjectile.Initialize(0);
+            _currentProjectile.Initialize();
         }
 
         private void ChargeProjectile()
         {
             if (_currentSize <= _minSize)
             {
-                GameManager.Instance.FailGame();
                 return;
             }
 
             var growthAmount = _growthSpeed * Time.deltaTime;
             _currentProjectile.AddSize(growthAmount);
-
+            SizeChanging?.Invoke(growthAmount);
             _currentSize -= growthAmount;
             UpdateScale();
         }
