@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClearThePath.Core
 {
-    public class Projectile : InfectableEntity
+    public class Projectile : InfectionDealer
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _infectionScaleFactor;

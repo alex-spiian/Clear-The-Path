@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClearThePath.Infectable
 {
-    public abstract class InfectableEntity : MonoBehaviour
+    public abstract class InfectionDealer : MonoBehaviour
     {
         protected void InfectNearbyObstacles(float infectionRadius)
         {

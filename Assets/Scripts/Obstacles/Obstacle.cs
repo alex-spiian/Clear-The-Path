@@ -3,10 +3,27 @@ using UnityEngine;
 
 namespace ClearThePath.Obstacles
 {
-    public class Obstacle : InfectableEntity
+    public class Obstacle : InfectionDealer
     {
         [SerializeField] private float _infectionRadius;
+        [SerializeField] private float _explosionDelay;
+        [SerializeField] private Color _infectedColor;
+        [SerializeField] private Renderer _renderer;
+
+        private Material _materialInstance;
         private bool _isInfected;
+
+        private void Awake()
+        {
+            if (_renderer != null)
+            {
+                _materialInstance = _renderer.material;
+            }
+            else
+            {
+                Debug.LogError("Renderer is not assigned on the Obstacle object!");
+            }
+        }
 
         public void Infect()
         {
@@ -14,19 +31,19 @@ namespace ClearThePath.Obstacles
                 return;
 
             _isInfected = true;
+
+            if (_materialInstance != null)
+            {
+                _materialInstance.color = _infectedColor;
+            }
+
             InfectNearbyObstacles(_infectionRadius);
-            Explode();
+            Invoke(nameof(Explode), _explosionDelay);
         }
 
         private void Explode()
         {
             Destroy(gameObject);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, _infectionRadius);
         }
     }
 }
