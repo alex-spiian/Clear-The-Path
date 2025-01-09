@@ -22,8 +22,12 @@ namespace ClearThePath.Core
         
         private void OnWin()
         {
-            Debug.Log("you win");
-            _playerMover.Move(_pathChecker.StartMovingPoint, _pathChecker.ExitPointPoint);
+            _playerMover.Move(_pathChecker.StartMovingPoint, _pathChecker.ExitPointPoint, OnPlayerGotExit);
+        }
+
+        private void OnPlayerGotExit()
+        {
+            // restart
         }
 
         private void OnLost()

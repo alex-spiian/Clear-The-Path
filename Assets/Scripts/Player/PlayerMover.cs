@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace ClearThePath
         [SerializeField] private float _jumpDuration;
         [SerializeField] private int _jumpsCount;
 
-        public void Move(Transform startMovingPoint, Transform exitPoint)
+        public void Move(Transform startMovingPoint, Transform exitPoint, Action onCompleteCallBack)
         {
             var midPoint = new Vector3(
                 (transform.position.x + startMovingPoint.position.x) / 2,
@@ -29,11 +30,11 @@ namespace ClearThePath
 
             sequence.AppendCallback(() =>
             {
-                JumpToExit(startMovingPoint, exitPoint);
+                JumpToExit(startMovingPoint, exitPoint, onCompleteCallBack);
             });
         }
 
-        private void JumpToExit(Transform startMovingPoint, Transform exitPoint)
+        private void JumpToExit(Transform startMovingPoint, Transform exitPoint, Action onComplete)
         {
             var totalDistance = Vector3.Distance(startMovingPoint.position, exitPoint.position);
             var direction = (exitPoint.position - startMovingPoint.position).normalized;
@@ -51,6 +52,11 @@ namespace ClearThePath
                     _jumpDuration
                 ).SetEase(Ease.OutQuad));
             }
+
+            jumpSequence.OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
     }
 }
