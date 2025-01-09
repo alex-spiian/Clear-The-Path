@@ -9,6 +9,9 @@ namespace ClearThePath.Core
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _infectionScaleFactor;
+        [SerializeField] private float _minProjectileSize;
+        [SerializeField] private float _maxProjectileSize;
+        [SerializeField] private float _distanceToTravel;
         [SerializeField] private Rigidbody _rigidbody;
         
         private Vector3 _targetPosition;
@@ -27,11 +30,18 @@ namespace ClearThePath.Core
             UpdateScale();
         }
 
+        public void SetMinSize()
+        {
+            _currentSize = _minProjectileSize;
+            UpdateScale();
+        }
+
         public void Launch(Action OnObstacleDestroyed)
         {
+            CorrectSize();
             _onObstacleDestroyed = OnObstacleDestroyed;
             _rigidbody.isKinematic = false;
-            var targetPositionZ = transform.position.z + 20;
+            var targetPositionZ = transform.position.z + _distanceToTravel;
             var targetPosition = new Vector3(transform.position.x, transform.position.y, targetPositionZ);
             var direction = targetPosition.normalized;
             _rigidbody.velocity = direction * _speed;
@@ -50,6 +60,11 @@ namespace ClearThePath.Core
                 Destroy(gameObject);
                 _onObstacleDestroyed?.Invoke();
             }
+        }
+
+        private void CorrectSize()
+        {
+            _currentSize = Mathf.Clamp(_currentSize, _minProjectileSize, _maxProjectileSize);
         }
     }
 }

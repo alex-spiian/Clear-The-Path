@@ -19,15 +19,20 @@ namespace ClearThePath
         private float _currentSize;
         private Projectile _currentProjectile;
         private bool _isCharging;
+        private bool _canShot;
 
         public void Initialize()
         {
             _currentSize = Vector3.one.x;
             UpdateScale();
+            _canShot = true;
         }
 
         private void Update()
         {
+            if (!_canShot)
+                return;
+                
             if (Input.GetMouseButtonDown(0))
             {
                 StartChargingProjectile();
@@ -40,7 +45,7 @@ namespace ClearThePath
 
             if (Input.GetMouseButtonUp(0))
             {
-                ReleaseProjectile();
+                TryReleaseProjectile();
             }
         }
 
@@ -57,6 +62,12 @@ namespace ClearThePath
         {
             if (_currentSize <= _minSize)
             {
+                _canShot = false;
+                Lost?.Invoke();
+
+                ReleaseProjectile();
+                _currentProjectile.SetMinSize();
+                _currentProjectile = null;
                 return;
             }
 
@@ -67,14 +78,19 @@ namespace ClearThePath
             UpdateScale();
         }
 
-        private void ReleaseProjectile()
+        private void TryReleaseProjectile()
         {
             if (!_isCharging || _currentProjectile == null)
                 return;
-            
+
+            ReleaseProjectile();
+            _currentProjectile = null;
+        }
+
+        private void ReleaseProjectile()
+        {
             _isCharging = false;
             _currentProjectile.Launch(ObstacleDestroyed);
-            _currentProjectile = null;
             ObstacleDestroyed?.Invoke();
         }
 

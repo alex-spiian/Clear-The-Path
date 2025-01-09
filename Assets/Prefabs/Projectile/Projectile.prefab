@@ -155,6 +155,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 30
   _infectionScaleFactor: 2.5
+  _minProjectileSize: 0.2
+  _maxProjectileSize: 0.2
+  _distanceToTravel: 20
   _rigidbody: {fileID: 7619636258311301804}
 --- !u!54 &7619636258311301804
 Rigidbody:
