@@ -10,6 +10,7 @@ namespace ClearThePath
         public event Action ObstacleDestroyed;
         public event Action Lost;
 
+        [field:SerializeField] public PlayerMover PlayerMover { get; private set; }
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private Transform _launchProjectilePoint;
         [SerializeField] private float _minSize;

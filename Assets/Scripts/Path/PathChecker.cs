@@ -5,8 +5,12 @@ using UnityEngine;
 
 namespace Path
 {
+ 
     public class PathChecker : MonoBehaviour
     {
+        [field:SerializeField] public Transform StartMovingPoint { get; private set; }
+        [field:SerializeField] public Transform ExitPointPoint { get; private set; }
+        
         [SerializeField] private BoxCollider _collider;
         [SerializeField] private int _delayBeforeCheckingMs;
         [SerializeField] private LayerMask _checkLayer;

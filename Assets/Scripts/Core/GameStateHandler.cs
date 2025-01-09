@@ -8,11 +8,13 @@ namespace ClearThePath.Core
     {
         private Player _player;
         private PathChecker _pathChecker;
+        private PlayerMover _playerMover;
 
         public void Initialize(Player player, PathChecker pathChecker)
         {
             _pathChecker = pathChecker;
             _player = player;
+            _playerMover = _player.PlayerMover;
             
             _pathChecker.Initialize(OnWin);
             _player.Lost += OnLost;
@@ -21,6 +23,7 @@ namespace ClearThePath.Core
         private void OnWin()
         {
             Debug.Log("you win");
+            _playerMover.Move(_pathChecker.StartMovingPoint, _pathChecker.ExitPointPoint);
         }
 
         private void OnLost()
