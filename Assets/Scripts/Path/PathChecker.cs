@@ -11,7 +11,6 @@ namespace Path
         [SerializeField] private int _delayBeforeCheckingMs;
         [SerializeField] private LayerMask _checkLayer;
 
-        private bool _pathCleared;
         private Action _pathClearedCallBack;
         
         public void Initialize(Action pathClearedCallBack)
@@ -21,7 +20,6 @@ namespace Path
    
         private void Win()
         {
-            _pathCleared = true;
             _pathClearedCallBack?.Invoke();
         }
 
